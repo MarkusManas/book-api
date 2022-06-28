@@ -17,7 +17,7 @@ class Book < ApplicationRecord
     # validation guidlines are based here https://www.isbn-international.org/content/what-isbn
     def valid_isbn13?
         digits = self.isbn13.scan(/\d/).join
-        
+        self.errors.add(:isbn13, 'has invalid length') if digits.length != 13
         self.errors.add(:isbn13, 'has invalid character') if self.isbn13.match?(/[^\d\-]/) 
         self.errors.add(:isbn13, 'has invalid check digit') unless self.class.calculate_isbn13_check_digit(digits[0..-2]) == digits[-1].to_i
         
